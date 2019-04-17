@@ -2,7 +2,7 @@ package main
 
 import org.apache.spark.sql.QueryTest
 import org.apache.spark.sql.catalyst.plans.Inner
-import org.apache.spark.sql.execution.joins.{BroadcastHashJoinExec, BroadcastNestedLoopJoinExec}
+import org.apache.spark.sql.execution.joins.{BroadcastHashJoinExec, BroadcastNestedLoopJoinExec, ShuffledHashJoinExec, SortMergeJoinExec}
 import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.test.SharedSQLContext
 import org.apache.spark.sql.functions._
@@ -61,6 +61,8 @@ class BroadCastJoinTest extends QueryTest with SharedSQLContext with TestHelpers
       val df1 = spark.range(100).as("a")
       val joinedDF = df1.join(broadcast(df2)).where($"a.id" === $"b.id")
       assert(joinedDF.queryExecution.sparkPlan.collect { case p: BroadcastHashJoinExec => p }.size === 1)
+      // Please don't change below assert to fix test
+      assert(joinedDF.queryExecution.sparkPlan.collect { case p: SortMergeJoinExec => p }.size === 0)
     }
   }
 
