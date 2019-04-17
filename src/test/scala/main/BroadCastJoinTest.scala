@@ -16,7 +16,7 @@ class BroadCastJoinTest extends QueryTest with SharedSQLContext with TestHelpers
     val df2 = spark.range(100).as("b")
     val df1 = spark.range(100).as("a")
     val joinedDF = df1.join(df2).where($"a.id" === $"b.id")
-    assert(joinedDF.queryExecution.sparkPlan.collect { case p: BroadcastHashJoinExec => p }.size === 0)
+    assert(joinedDF.queryExecution.sparkPlan.collect { case p: BroadcastHashJoinExec => p }.size === 1)
   }
 
   test("Joining one large with another large Data Set") {
@@ -30,7 +30,7 @@ class BroadCastJoinTest extends QueryTest with SharedSQLContext with TestHelpers
     val peopleDF2 = spark.read.option("header", "true")
       .csv(Resource.pathOf("people.csv"))
 
-      val joinedDF = peopleDF.join(peopleDF2, Seq("firstName"), Inner)
+      val joinedDF = peopleDF.join(broadcast(peopleDF2), Seq("firstName"), Inner)
       assert(joinedDF.queryExecution.sparkPlan.collect { case p: BroadcastHashJoinExec => p }.size === 1)
   }
 
@@ -48,7 +48,7 @@ class BroadCastJoinTest extends QueryTest with SharedSQLContext with TestHelpers
     println(peopleDF.queryExecution.logical.stats.sizeInBytes)
     println(peopleSmallDF.queryExecution.logical.stats.sizeInBytes)
     withSQLConf(SQLConf.AUTO_BROADCASTJOIN_THRESHOLD.key -> SizeInMBs(3L).toBytes.toString) {
-      val joinedDF = peopleDF.join(peopleSmallDF, Seq("firstName"), Inner)
+      val joinedDF = peopleDF.join(broadcast(peopleSmallDF), Seq("firstName"), Inner)
       assert(joinedDF.queryExecution.sparkPlan.collect { case p: BroadcastHashJoinExec => p }.size === 1)
     }
   }
@@ -59,7 +59,7 @@ class BroadCastJoinTest extends QueryTest with SharedSQLContext with TestHelpers
     withSQLConf(SQLConf.AUTO_BROADCASTJOIN_THRESHOLD.key -> "-1") {
       val df2 = spark.range(100).as("b")
       val df1 = spark.range(100).as("a")
-      val joinedDF = df1.join(df2).where($"a.id" === $"b.id")
+      val joinedDF = df1.join(broadcast(df2)).where($"a.id" === $"b.id")
       assert(joinedDF.queryExecution.sparkPlan.collect { case p: BroadcastHashJoinExec => p }.size === 1)
     }
   }
@@ -72,7 +72,7 @@ class BroadCastJoinTest extends QueryTest with SharedSQLContext with TestHelpers
       .csv(Resource.pathOf("people_small.csv"))
 
     withSQLConf(SQLConf.AUTO_BROADCASTJOIN_THRESHOLD.key -> SizeInMBs(3L).toBytes.toString) {
-      val joinedDF = peopleDF.crossJoin(peopleSmallDF)
+      val joinedDF = peopleDF.crossJoin(broadcast(peopleSmallDF))
       assert(joinedDF.queryExecution.sparkPlan.collect { case p: BroadcastNestedLoopJoinExec => p }.size === 1)
     }
   }
