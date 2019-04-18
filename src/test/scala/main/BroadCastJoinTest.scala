@@ -84,4 +84,5 @@ class BroadCastJoinTest extends QueryTest with SharedSQLContext with TestHelpers
   // Check this spark class to find out how JoinSelection works.
   // https://github.com/apache/spark/blob/master/sql/core/src/main/scala/org/apache/spark/sql/execution/SparkStrategies.scala
   // Especially CanBroadCast,canBuildRight,canBuildLeft methods
+  // Look at: https://www.coursera.org/lecture/big-data-analysis/optimizing-joins-VZmLX
 }

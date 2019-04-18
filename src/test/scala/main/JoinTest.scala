@@ -87,4 +87,12 @@ class JoinTest extends QueryTest with SharedSQLContext with TestHelpers {
     checkAnswer(actualDF, expectedDF)
   }
 
+  // TODO for attendees:
+  // 1. How many types of joins are possible in spark.
+  // 2. How partitions help to do map-side joins.
+  // 3. Importance to filter before join. What is predicate push downs why it is important and What filter conditions are not possible push down.
+  // 4. What to consider when joining dataframes are loaded from a different sources (like file joins with jdbc, s3 joins with hdfs).
+  // 5. What do you do when we have highly skew data while joining. For Skew in data please look below links:
+  // https://medium.com/simpl-under-the-hood/spark-protip-joining-on-skewed-dataframes-7bfa610be704
+  // https://bigdatacraziness.wordpress.com/2018/01/05/oh-my-god-is-my-data-skewed/
 }
