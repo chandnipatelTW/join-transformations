@@ -16,3 +16,4 @@ libraryDependencies ++=  Seq(
   spark("sql"),
   spark("catalyst")
 )
+fork in Test := true
