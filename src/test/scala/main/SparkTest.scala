@@ -1,15 +1,16 @@
 package main
 
 import org.apache.spark.sql.catalyst.plans.JoinType
+import org.apache.spark.sql.test.SharedSQLContext
 import org.apache.spark.sql.{DataFrame, QueryTest}
 
 import scala.reflect.ClassTag
 
-trait TestHelpers {
-  self: QueryTest =>
-  protected override def beforeAll(): Unit = {
-    self.beforeAll()
-    self.spark.sparkContext.setLogLevel(org.apache.log4j.Level.ERROR.toString)
+trait SparkTest extends QueryTest with SharedSQLContext {
+
+  override protected def initializeSession(): Unit = {
+    super.initializeSession()
+    spark.sparkContext.setLogLevel(org.apache.log4j.Level.ERROR.toString)
   }
 
   object Resource {

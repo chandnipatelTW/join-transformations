@@ -1,13 +1,11 @@
 package main
 
-import org.apache.spark.sql.QueryTest
 import org.apache.spark.sql.catalyst.plans.Inner
-import org.apache.spark.sql.execution.joins.{BroadcastHashJoinExec, BroadcastNestedLoopJoinExec, ShuffledHashJoinExec, SortMergeJoinExec}
-import org.apache.spark.sql.internal.SQLConf
-import org.apache.spark.sql.test.SharedSQLContext
+import org.apache.spark.sql.execution.joins.{BroadcastHashJoinExec, BroadcastNestedLoopJoinExec, SortMergeJoinExec}
 import org.apache.spark.sql.functions._
+import org.apache.spark.sql.internal.SQLConf
 
-class BroadCastJoinTest extends QueryTest with SharedSQLContext with TestHelpers {
+class BroadCastJoinTest extends SparkTest {
   import testImplicits._
 
   test("Joining Two smaller Data Sets") {

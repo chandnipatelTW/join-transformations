@@ -1,9 +1,6 @@
 package main
 
-import org.apache.spark.sql.{DataFrame, QueryTest}
-import org.apache.spark.sql.test.SharedSQLContext
-
-class JoinTest extends QueryTest with SharedSQLContext with TestHelpers {
+class JoinTest extends SparkTest {
 
   import testImplicits._
 

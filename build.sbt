@@ -1,7 +1,8 @@
+import sbt.util
+
 name := "data-transformations"
 version := "0.1"
 scalaVersion := "2.12.8"
-
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 val sparkModuleId = (name: String) => "org.apache.spark" %% s"spark-$name" % "2.4.0"
 val spark = (name: String) => sparkModuleId(name) % "provided"
@@ -16,3 +17,4 @@ libraryDependencies ++=  Seq(
   spark("sql"),
   spark("catalyst")
 )
+fork in Test := true
