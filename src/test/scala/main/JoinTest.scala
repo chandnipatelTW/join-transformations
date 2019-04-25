@@ -59,27 +59,27 @@ class JoinTest extends SparkTest {
     checkAnswer(actualDF, expectedDF)
   }
 
-  test("all possible customer and orders combinations") {
+  test("all possible customer and genders combinations") {
 
-    val actualDF = TestData.customers
-      .crossJoin(TestData.genders)
-      .drop("genderCode")
+    val actualDF = TestData.customers.select("customerId","name")
+      .crossJoin(TestData.genders.select("gender"))
 
-    val expectedDF = Seq((1,"Alex","Female"),
-    (1,"Alex","Male"),
-    (1,"Alex","Other"),
-    (2,"Bill","Female"),
-    (2,"Bill","Male"),
-    (2,"Bill","Other"),
-    (3,"Steffi","Female" ),
-    (3,"Steffi","Male"),
-    (3,"Steffi","Other"),
-    (4,"Mary","Female"),
-    (4,"Mary","Male"),
-    (4,"Mary","Other"),
-    (5,"Julia","Female"),
-    (5,"Julia","Male"),
-    (5,"Julia","Other")).toDF("customerId", "name", "gender")
+    val expectedDF = Seq(
+      (1,"Alex","Female"),
+      (1,"Alex","Male"),
+      (1,"Alex","Other"),
+      (2,"Bill","Female"),
+      (2,"Bill","Male"),
+      (2,"Bill","Other"),
+      (3,"Steffi","Female" ),
+      (3,"Steffi","Male"),
+      (3,"Steffi","Other"),
+      (4,"Mary","Female"),
+      (4,"Mary","Male"),
+      (4,"Mary","Other"),
+      (5,"Julia","Female"),
+      (5,"Julia","Male"),
+      (5,"Julia","Other")).toDF("customerId", "name", "gender")
 
     checkAnswer(actualDF, expectedDF)
   }
