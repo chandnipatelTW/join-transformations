@@ -3,7 +3,7 @@ package thoughtworks
 import org.apache.spark.sql.SparkSession
 
 object Shopping {
-  val spark = SparkSession.builder().appName("Analyze Shopping Data Spark App").getOrCreate()
+  val spark: SparkSession = SparkSession.builder().appName("Analyze Shopping Data Spark App").getOrCreate()
 
   def main(args: Array[String]): Unit = {
     import spark.implicits._
