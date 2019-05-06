@@ -2,9 +2,9 @@ package thoughtworks
 
 import org.apache.spark.sql.{Dataset, Row}
 
-case class SellAnalyzer(val customerDF: Dataset[Row],
-                   val orderDF: Dataset[Row],
-                   val genderDF: Dataset[Row]) {
+case class SellAnalyzer(customerDF: Dataset[Row],
+                   orderDF: Dataset[Row],
+                   genderDF: Dataset[Row]) {
 
   def getOrdersWithCustomerNameAndGender: Dataset[Row] = {
     customerDF
